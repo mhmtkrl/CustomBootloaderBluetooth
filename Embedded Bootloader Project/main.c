@@ -3,18 +3,14 @@
 #include "gpio_config.h"
 #include "sysTick_timer_config.h"
 
-
 int main() {
-	initSysTickTimerInMiliseconds(10, (uint32_t)CLOCK_FREQ);
+	initSysTickTimerInMiliseconds(1, (uint32_t)CLOCK_FREQ);
 	InitUserLED();
 	
 	while(1) {
 		OnUserLED();
-		delayMS(1000);
+		delayMS(100);
 		OffUserLED();
 		delayMS(1000);
 	}
 }
-
-
-
