@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\Embedded Bootloader Project</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -387,6 +387,16 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\flash_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\flash_config.h</FilePath>
             </File>
           </Files>
         </Group>
