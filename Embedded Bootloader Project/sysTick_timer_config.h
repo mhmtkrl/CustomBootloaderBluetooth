@@ -12,4 +12,7 @@ static uint32_t *sysTickRVR = (uint32_t *)SysTickReloadValueRegister;
 static uint32_t *sysTickCVR = (uint32_t *)SysTickCurrentValueRegister;
 static uint32_t *sysTickCalibrationVR = (uint32_t *)SysTickCalibrationValueRegister;
 
+static int16_t sysTickCount = 0;
+
 void initSysTickTimerInMiliseconds(uint16_t, uint32_t);
+void delayMS(int16_t del);
