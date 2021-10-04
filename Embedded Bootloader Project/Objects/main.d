@@ -5,3 +5,4 @@
 .\objects\main.o: gpio_config.h
 .\objects\main.o: sysTick_timer_config.h
 .\objects\main.o: clock_config.h
+.\objects\main.o: uart_config.h

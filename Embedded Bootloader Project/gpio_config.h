@@ -14,24 +14,28 @@ This is for GPIO register address
 #define moder_offset 					0x00
 #define idr_offset 						0x10
 #define bsrr_offset						0x18
+#define afrl_offset						0x20
 
 //FLASH Registers
 typedef struct {
-	uint32_t *MODER;				//GPIO port mode register
-	uint32_t *IDR;			//GPIO port input data register
-	uint32_t *BSRR;		//GPIO port bit set/reset register
+	uint32_t *MODER;				 //GPIO port mode register
+	uint32_t *IDR;					 //GPIO port input data register
+	uint32_t *BSRR;					 //GPIO port bit set/reset register
+	uint32_t *AFRL;					 //GPIO alternate function low register
 }GPIORegister;
 
 static GPIORegister GPIOA = {
 	(uint32_t*)(gpioa_base + moder_offset), 
 	(uint32_t*)(gpioa_base + idr_offset),
-	(uint32_t*)(gpioa_base + bsrr_offset)
+	(uint32_t*)(gpioa_base + bsrr_offset),
+	(uint32_t*)(gpioa_base + afrl_offset)
 };
 
 static GPIORegister GPIOC = {
 	(uint32_t*)(gpioc_base + moder_offset), 
 	(uint32_t*)(gpioc_base + idr_offset),
-	(uint32_t*)(gpioc_base + bsrr_offset)
+	(uint32_t*)(gpioc_base + bsrr_offset),
+	(uint32_t*)(gpioc_base + afrl_offset)
 };
 
 void InitUserLED(void);
