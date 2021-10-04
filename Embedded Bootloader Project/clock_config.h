@@ -4,6 +4,8 @@ This is for Reset and Clock register functions
 
 #include <stdint.h>
 
+//2.097 MHz
+#define CLOCK_FREQ 					2097000		
 //Register Boundary Address Table 36 page 168 RM0038
 #define rcc_base						0x40023800
 //RCC Register Map Table 24 page 91 RM0038
