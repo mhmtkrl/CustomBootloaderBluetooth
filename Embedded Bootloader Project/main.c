@@ -1,8 +1,7 @@
 #include "flash_config.h"
 
-//Reset value of PECR is 0x0000 0007, so let's check it
-uint32_t pecrValue;
+uint8_t pelock;
 
 int main() {
-	pecrValue = *FLASH.PECR;
+	pelock = unlocking_Flash_PECR_Register();
 }
