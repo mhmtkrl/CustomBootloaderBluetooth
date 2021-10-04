@@ -9,6 +9,7 @@ This is for FLASH register address and some flash functions
 //FLASH Register Map Table 24 page 91 RM0038
 #define flash_pecr_offset 		0x04
 #define flash_pekeyr_offset 	0x0C
+#define flash_prgkeyr_offset	0x10
 
 //FLASH Registers
 typedef struct {
@@ -19,7 +20,9 @@ typedef struct {
 
 static flashRegister FLASH = {
 	(uint32_t*)(flash_base + flash_pecr_offset), 
-	(uint32_t*)(flash_base + flash_pekeyr_offset)
+	(uint32_t*)(flash_base + flash_pekeyr_offset),
+	(uint32_t*)(flash_base + flash_prgkeyr_offset)
 };
 
+uint8_t unlocking_Program_Memory(void);
 uint8_t unlocking_Flash_PECR_Register(void);
