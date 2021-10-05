@@ -13,11 +13,11 @@
 #define XMODEM_CAN 0x18
 #define XMODEM_SUB 0x1A
 
-typedef struct {
+__packed typedef struct {
 	uint8_t pakcet_SOH;
 	uint8_t packetNumber;
 	uint8_t pakcetNumberComp;
-	unsigned char packetData[128];
+	uint32_t packetData[32];
 	uint16_t packetCRC;
 }BootPacket;
 
@@ -28,11 +28,15 @@ int8_t fileTransferComplete = 0;
 int8_t pos = 0;
 int16_t j = 0;
 
+uint32_t adr = 0;
+uint8_t byte0, byte1, byte2, byte3;
+
 void USART3_IRQHandler(void) {
 	//If it is a RX ISR
 	if(*USART3.SR & (1ul << 5)) {
 		receivedBluetoothPacket[receivedBluetoothIndex] = *USART3.DR;
-		((uint8_t *)(&bootPacket[packetPosition]))[receivedBluetoothIndex] = receivedBluetoothPacket[receivedBluetoothIndex];
+		*USART2.DR = receivedBluetoothPacket[receivedBluetoothIndex];
+		((uint8_t *)(&bootPacket[packetPosition]))[receivedBluetoothIndex] = (uint8_t)receivedBluetoothPacket[receivedBluetoothIndex];
 		receivedBluetoothIndex++;	
 			
 		if(bootPacket[packetPosition].pakcet_SOH == XMODEM_EOT) {
@@ -53,9 +57,6 @@ int main() {
 	InitUserLED();
 	InitUARTforDebug();	
 	InitUARTforBluetooth();
-	//ERASE and WRITE a WORD @APPLICATION_FIRMWARE_BASE_ADDRESS
-	program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS);
-	program_Memory_Fast_Word_Write(APPLICATION_FIRMWARE_BASE_ADDRESS, 0xAABBCCDD);
 	
 	welcomeMessage();
 	
@@ -64,17 +65,30 @@ int main() {
 	
 	while(1) {
 		if(fileTransferComplete) {
-			UARTDebugSend("file transfer is done\r\n");
+			UARTDebugSend("\r\nfile transfer is done\r\n");
 			OnUserLED();
-			UARTDebugSend("\r\nByte by Byte\r\n");
+			//////ERASE PARTICULAR SECTORS///////////////////////
+			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS);
+			sprintf(msg, "+++SECTOR %d is erased!\n", (((uint32_t)APPLICATION_FIRMWARE_BASE_ADDRESS) & 0x000FF000) >> 12);
+			UARTDebugSend(msg);
+			sprintf(msg, "+++Current Data @ 0x%X      : 0x%X\n", (uint32_t)APPLICATION_FIRMWARE_BASE_ADDRESS, *(uint32_t*)APPLICATION_FIRMWARE_BASE_ADDRESS);
+			UARTDebugSend(msg);
+			/////////////////////////////////////////////
+			
 			for(pos = 0 ; pos < packetPosition ; pos++) {
-				sprintf(msg, "Received Packet[%d]: ", pos);
+				sprintf(msg, "\r\nWriting to the allocated memory area...\n");
 				UARTDebugSend(msg);
-				for(j = 0 ; j < 128 ; j++) {
-					sprintf(msg, "%c", bootPacket[pos].packetData[j]);
+				for(j = 0 ; j < 32 ; j++) {
+					byte3 = (bootPacket[pos].packetData[j]&0xFF000000) >> 24;
+					byte2 = (bootPacket[pos].packetData[j]&0x00FF0000) >> 16;
+					byte1 = (bootPacket[pos].packetData[j]&0x0000FF00) >> 8;
+					byte0 = (bootPacket[pos].packetData[j]&0x000000FF) >> 0;
+					program_Memory_Fast_Word_Write((APPLICATION_FIRMWARE_BASE_ADDRESS + adr), bootPacket[pos].packetData[j]);
+					//sprintf(msg, "@0x%X = 0x%X => %c%c%c%c\n", (APPLICATION_FIRMWARE_BASE_ADDRESS + adr), bootPacket[pos].packetData[j], byte0, byte1, byte2, byte3);
+					sprintf(msg, "0x%X, 0x%X, 0x%X, 0x%X => %c%c%c%c, 0x%X\n", bootPacket[pos].pakcet_SOH, bootPacket[pos].packetNumber, bootPacket[pos].pakcetNumberComp, bootPacket[pos].packetData[j], byte0, byte1, byte2, byte3, bootPacket[pos].packetCRC);
 					UARTDebugSend(msg);
+					adr += 4;
 				}
-				UARTDebugSend("\r\n");
 			}
 			UARTDebugSend("\r\nEnd of bootloader process\r\n");
 			OffUserLED();
