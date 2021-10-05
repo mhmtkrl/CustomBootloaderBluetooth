@@ -158,19 +158,3 @@ void USART2_IRQHandler(void) {
 	}
 }
 
-void USART3_IRQHandler(void) {
-	//If it is a RX ISR
-	if(*USART3.SR & (1ul << 5)) {
-		if(*USART3.DR != '\n') {		//When press enter 
-			receivedBluetoothPacket[receivedBluetoothIndex] = *USART3.DR;
-			receivedBluetoothIndex++;
-		}else {
-			sprintf(receivedBluetoothPacketToDebug, "From Bluetooth : %s", receivedBluetoothPacket);
-			UARTDebugSend(receivedBluetoothPacketToDebug);
-			for(clearBluetoothPacket = 0; clearBluetoothPacket < receivedBluetoothIndex ; clearBluetoothPacket++) receivedBluetoothPacket[clearBluetoothPacket] = '\0';
-			receivedBluetoothIndex = 0;
-		}
-		*USART3.SR &= ~(1ul << 5);	//The RXNE flag can also be cleared by writing a zero to it
-	}
-}
-
