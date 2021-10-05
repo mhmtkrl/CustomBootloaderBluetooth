@@ -4,7 +4,6 @@
 #include "sysTick_timer_config.h"
 #include "uart_config.h"
 
-uint16_t pckCnt = 0;
 char msg[64];
 
 int main() {
@@ -12,8 +11,18 @@ int main() {
 	InitUserLED();
 	InitUARTforDebug();	
 	InitUARTforBluetooth();
+	//ERASE and WRITE a WORD @APPLICATION_FIRMWARE_BASE_ADDRESS
+	program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS);
+	program_Memory_Fast_Word_Write(APPLICATION_FIRMWARE_BASE_ADDRESS, 0xAABBCCDD);
 	//Welcome Message
 	UARTDebugSend(debugWelcomeMessage);
+	sprintf(msg, "--Bootloader Size               : %d kB\n", (uint8_t)BOOTLOADER_SIZE_KB);
+	UARTDebugSend(msg);
+	sprintf(msg, "--Application Code Base Address : 0x%X\n", (uint32_t)APPLICATION_FIRMWARE_BASE_ADDRESS);
+	UARTDebugSend(msg);
+	sprintf(msg, "--Current Data @ 0x%X      : 0x%X\n", (uint32_t)APPLICATION_FIRMWARE_BASE_ADDRESS, *(uint32_t*)APPLICATION_FIRMWARE_BASE_ADDRESS);
+	UARTDebugSend(msg);
+	
 	UARTBluetoothSend(bluetoothWelcomeMessage);
 	
 	while(1) {

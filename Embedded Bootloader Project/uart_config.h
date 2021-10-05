@@ -53,13 +53,13 @@ static char receivedDebugPacket[64];
 static char receivedDebugPacketToDebug[64];
 static int16_t receivedDebugIndex = 0;
 static int16_t clearDebugPacket = 0;
-static char debugWelcomeMessage[] = "*****Debug Welcome Screen*****\r\n";
+static char debugWelcomeMessage[] = "\r\n**********Debug Welcome Screen**********\r";
 
 static char receivedBluetoothPacket[64];
 static char receivedBluetoothPacketToDebug[64];
 static int16_t receivedBluetoothIndex = 0;
 static int16_t clearBluetoothPacket = 0;
-static char bluetoothWelcomeMessage[] = "*****Bluetooth Welcome Screen*****\r\n";
+static char bluetoothWelcomeMessage[] = "\r\n**********Bluetooth Welcome Screen**********\r";
 
 void InitUARTforBluetooth(void);
 void UARTBluetoothSend(char packet[]);
