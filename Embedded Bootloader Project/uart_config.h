@@ -50,12 +50,16 @@ static USARTRegister USART3 = {
 };
 
 static char receivedDebugPacket[64];
+static char receivedDebugPacketToDebug[64];
 static int16_t receivedDebugIndex = 0;
 static int16_t clearDebugPacket = 0;
+static char debugWelcomeMessage[] = "*****Debug Welcome Screen*****\r\n";
 
 static char receivedBluetoothPacket[64];
+static char receivedBluetoothPacketToDebug[64];
 static int16_t receivedBluetoothIndex = 0;
 static int16_t clearBluetoothPacket = 0;
+static char bluetoothWelcomeMessage[] = "*****Bluetooth Welcome Screen*****\r\n";
 
 void InitUARTforBluetooth(void);
 void UARTBluetoothSend(char packet[]);

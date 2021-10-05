@@ -12,16 +12,11 @@ int main() {
 	InitUserLED();
 	InitUARTforDebug();	
 	InitUARTforBluetooth();
+	//Welcome Message
+	UARTDebugSend(debugWelcomeMessage);
+	UARTBluetoothSend(bluetoothWelcomeMessage);
 	
 	while(1) {
-		sprintf(msg, "Packet Number = %d\n", pckCnt);
-		UARTDebugSend(msg);
-		UARTBluetoothSend(msg);
-		pckCnt++;
-
-		OnUserLED();
-		delayMS(100);
-		OffUserLED();
-		delayMS(100);
+		
 	}
 }

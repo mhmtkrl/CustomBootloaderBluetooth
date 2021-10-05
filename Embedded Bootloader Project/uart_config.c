@@ -147,7 +147,8 @@ void USART2_IRQHandler(void) {
 			receivedDebugPacket[receivedDebugIndex] = *USART2.DR;
 			receivedDebugIndex++;
 		}else {
-			UARTBluetoothSend(receivedDebugPacket);
+			sprintf(receivedDebugPacketToDebug, "From Terminal  : %s", receivedDebugPacket);
+			UARTDebugSend(receivedDebugPacketToDebug);
 			for(clearDebugPacket = 0; clearDebugPacket < receivedDebugIndex ; clearDebugPacket++) receivedDebugPacket[clearDebugPacket] = '\0';
 			receivedDebugIndex = 0;
 		}
@@ -162,7 +163,8 @@ void USART3_IRQHandler(void) {
 			receivedBluetoothPacket[receivedBluetoothIndex] = *USART3.DR;
 			receivedBluetoothIndex++;
 		}else {
-			UARTDebugSend(receivedBluetoothPacket);
+			sprintf(receivedBluetoothPacketToDebug, "From Bluetooth : %s", receivedBluetoothPacket);
+			UARTDebugSend(receivedBluetoothPacketToDebug);
 			for(clearBluetoothPacket = 0; clearBluetoothPacket < receivedBluetoothIndex ; clearBluetoothPacket++) receivedBluetoothPacket[clearBluetoothPacket] = '\0';
 			receivedBluetoothIndex = 0;
 		}
