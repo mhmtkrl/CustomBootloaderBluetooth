@@ -28,19 +28,20 @@ Repeat this for each data to be transmitted in case of single buffer.
 8. After writing the last data into the USART_DR register, wait until TC=1. This indicates that the transmission of the last frame is complete. 
 This is required for instance when the USART is disabled or enters the Halt mode to avoid corrupting the last transmission.
 */
+
 void InitUARTforDebug(void) {
 	//AHB is enabled for GPIOA
 	*RCC.AHBENR |= 1ul << 0;
+	//AFIO7 for PA2
+	*GPIOA.AFRL |= (7ul << 8);
+	//AFIO7 for PA3
+	*GPIOA.AFRL |= (7ul << 12);
 	//PA2 is alternate function mode
 	*GPIOA.MODER &= ~(1ul << 4);
 	*GPIOA.MODER |= (1ul << 5);
 	//PA3 is alternate function mode
 	*GPIOA.MODER &= ~(1ul << 6);
 	*GPIOA.MODER |= (1ul << 7);
-	//AFIO7 for PA2
-	*GPIOA.AFRL |= (7ul << 8);
-	//AFIO7 for PA3
-	*GPIOA.AFRL |= (7ul << 12);
 	
 	//USART2 clock enable
 	*RCC.APB1ENR |= (1ul << 17);
@@ -59,25 +60,12 @@ void InitUARTforDebug(void) {
 	*USART2.CR1 |= (1ul << 3);
 }
 
-void UARTDebugSend(uint8_t packet[]) {
+void UARTDebugSend(char packet[]) {
 	int16_t i = 0;
 	while(packet[i] != '\0') {
 		*USART2.DR = packet[i];
-		while(!(*USART2.SR & 0x00000040));
+		//If a frame is transmitted (after the stop bit) and the TXE bit is set, the TC bit goes high.
+		while(!(*USART2.SR & (1ul << 6)));
 		i++;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

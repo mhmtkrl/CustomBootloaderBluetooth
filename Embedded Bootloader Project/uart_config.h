@@ -3,6 +3,7 @@ This is for UART register address
 */
 
 #include <stdint.h>
+#include "stdio.h"
 
 //Register Boundary Address Table 5 page 47 RM0038
 #define usart2_base						0x40004400
@@ -48,4 +49,4 @@ static USARTRegister USART3 = {
 };
 
 void InitUARTforDebug(void);
-void UARTDebugSend(uint8_t packet[]);
+void UARTDebugSend(char packet[]);
