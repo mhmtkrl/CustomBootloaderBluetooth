@@ -1,6 +1,8 @@
 #include "uart_config.h"
 #include "clock_config.h"
 #include "gpio_config.h"
+#include "program_memory.h"
+#include "flash_config.h"
 
 /*
 This function for USART3 that is used for communicating to the host device over Bluetooth

@@ -5,3 +5,5 @@
 .\objects\uart_config.o: NVIC_controller.h
 .\objects\uart_config.o: clock_config.h
 .\objects\uart_config.o: gpio_config.h
+.\objects\uart_config.o: program_memory.h
+.\objects\uart_config.o: flash_config.h

@@ -49,18 +49,22 @@ static USARTRegister USART3 = {
 	(uint32_t*)(usart3_base + usart_gtpr_offset)
 };
 
+
+static char msg[64];
+
 static char receivedDebugPacket[64];
 static char receivedDebugPacketToDebug[64];
 static int16_t receivedDebugIndex = 0;
 static int16_t clearDebugPacket = 0;
-static char debugWelcomeMessage[] = "\r\n**********Debug Welcome Screen**********\r";
+static char debugWelcomeMessage[] = "\r\n**********Debug Welcome Screen**********\n";
 
 static char receivedBluetoothPacket[64];
 static char receivedBluetoothPacketToDebug[64];
 static int16_t receivedBluetoothIndex = 0;
 static int16_t clearBluetoothPacket = 0;
-static char bluetoothWelcomeMessage[] = "\r\n**********Bluetooth Welcome Screen**********\r";
+static char bluetoothWelcomeMessage[] = "\r\n**********Bluetooth Welcome Screen**********\n";
 
+void welcomeMessage(void);
 void InitUARTforBluetooth(void);
 void UARTBluetoothSend(char packet[]);
 void InitUARTforDebug(void);
