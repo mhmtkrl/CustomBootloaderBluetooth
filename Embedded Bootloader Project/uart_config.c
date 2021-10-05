@@ -29,8 +29,8 @@ Repeat this for each data to be transmitted in case of single buffer.
 This is required for instance when the USART is disabled or enters the Halt mode to avoid corrupting the last transmission.
 */
 void InitUARTforDebug(void) {
-	//USART2 clock enable
-	*RCC.APB1ENR |= (1ul << 17);
+	//AHB is enabled for GPIOA
+	*RCC.AHBENR |= 1ul << 0;
 	//PA2 is alternate function mode
 	*GPIOA.MODER &= ~(1ul << 4);
 	*GPIOA.MODER |= (1ul << 5);
@@ -42,6 +42,42 @@ void InitUARTforDebug(void) {
 	//AFIO7 for PA3
 	*GPIOA.AFRL |= (7ul << 12);
 	
+	//USART2 clock enable
+	*RCC.APB1ENR |= (1ul << 17);
 	//Enable USART2
 	*USART2.CR1 |= (1ul << 13);
+	//1 Start bit, 8 Data bits, n Stop bit
+	*USART2.CR1 &= ~(1ul << 12);
+	//1 Stop bit
+	*USART2.CR2 &= ~(1ul << 12);
+	*USART2.CR2 &= ~(1ul << 13);
+	//oversampling by 16
+	*USART2.CR1 &= ~(1ul << 15);
+	//BRR
+	*USART2.BRR = 0x00000012;
+	//Transmitter enable
+	*USART2.CR1 |= (1ul << 3);
 }
+
+void UARTDebugSend(uint8_t packet[]) {
+	int16_t i = 0;
+	while(packet[i] != '\0') {
+		*USART2.DR = packet[i];
+		while(!(*USART2.SR & 0x00000040));
+		i++;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

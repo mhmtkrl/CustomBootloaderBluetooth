@@ -4,15 +4,18 @@
 #include "sysTick_timer_config.h"
 #include "uart_config.h"
 
+uint8_t msg[] = "Hello World!\n";
+
 int main() {
-	initSysTickTimerInMiliseconds(1, (uint32_t)CLOCK_FREQ);
+ 	initSysTickTimerInMiliseconds(1, (uint32_t)CLOCK_FREQ);
 	InitUserLED();
-	InitUARTforDebug();
+	InitUARTforDebug();	
 	
 	while(1) {
+		UARTDebugSend(msg);
 		OnUserLED();
 		delayMS(100);
 		OffUserLED();
-		delayMS(1000);
+		delayMS(500);
 	}
 }

@@ -48,3 +48,4 @@ static USARTRegister USART3 = {
 };
 
 void InitUARTforDebug(void);
+void UARTDebugSend(uint8_t packet[]);
