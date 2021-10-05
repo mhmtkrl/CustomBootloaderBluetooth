@@ -14,5 +14,5 @@ static uint32_t *sysTickCalibrationVR = (uint32_t *)SysTickCalibrationValueRegis
 
 static int16_t sysTickCount = 0;
 
-void initSysTickTimerInMiliseconds(uint16_t, uint32_t);
+void InitSysTickTimerInMiliseconds(uint16_t, uint32_t);
 void delayMS(int16_t del);

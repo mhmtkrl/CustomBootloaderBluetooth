@@ -8,13 +8,15 @@ uint16_t pckCnt = 0;
 char msg[64];
 
 int main() {
- 	initSysTickTimerInMiliseconds(1, (uint32_t)CLOCK_FREQ);
+ 	InitSysTickTimerInMiliseconds(1, (uint32_t)CLOCK_FREQ);
 	InitUserLED();
 	InitUARTforDebug();	
+	InitUARTforBluetooth();
 	
 	while(1) {
 		sprintf(msg, "Packet Number = %d\n", pckCnt);
 		UARTDebugSend(msg);
+		UARTBluetoothSend(msg);
 		pckCnt++;
 
 		OnUserLED();

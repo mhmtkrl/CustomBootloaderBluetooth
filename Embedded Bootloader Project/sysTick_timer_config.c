@@ -1,6 +1,6 @@
 #include "sysTick_timer_config.h"
 
-void initSysTickTimerInMiliseconds(uint16_t delayMS, uint32_t clockFreq) {
+void InitSysTickTimerInMiliseconds(uint16_t delayMS, uint32_t clockFreq) {
 	uint32_t reloadValue = 0;
 	//Clock source -> Core Clock
 	*sysTickCSR |= 1ul << 2;

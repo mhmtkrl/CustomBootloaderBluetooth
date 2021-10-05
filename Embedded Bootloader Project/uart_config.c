@@ -3,6 +3,66 @@
 #include "gpio_config.h"
 
 /*
+This function for USART3 that is used for communicating to the host device over Bluetooth
+
+Table 9: Alternate Function Input/Output Page 47 DocID025433
+PB10 -> USART2_TX	  -> AFIO7
+PB11 -> UART2_RX		-> AFIO7
+*/
+void InitUARTforBluetooth(void) {
+	//AHB is enabled for GPIOB
+	*RCC.AHBENR |= 1ul << 1;
+	//AFIO7 for PB10
+	*GPIOB.AFRH |= (7ul << 8);
+	//AFIO7 for PB11
+	*GPIOB.AFRH |= (7ul << 12);
+	//PB10 is alternate function mode
+	*GPIOB.MODER &= ~(1ul << 20);
+	*GPIOB.MODER |= (1ul << 21);
+	//PB11 is alternate function mode
+	*GPIOB.MODER &= ~(1ul << 22);
+	*GPIOB.MODER |= (1ul << 23);
+	
+	//USART3 clock enable
+	*RCC.APB1ENR |= (1ul << 18);
+	//Enable USART3
+	*USART3.CR1 |= (1ul << 13);
+	//1 Start bit, 8 Data bits, n Stop bit
+	*USART3.CR1 &= ~(1ul << 12);
+	//1 Stop bit
+	*USART3.CR2 &= ~(1ul << 12);
+	*USART3.CR2 &= ~(1ul << 13);
+	//oversampling by 16
+	*USART3.CR1 &= ~(1ul << 15);
+	//BRR
+	//OVER8 = 0;
+	//USARTDIV = Fclk / (8*2*BaudRate)
+	//USARTDIV = 2097000/16*115200 = 1.1376..
+	//Mantissa -> 1
+	//Fraction -> 0.1376 * 16 ~= 2;
+	//USARTDIV = 0x12;
+	*USART3.BRR = 0x00000012;
+	//RXNE interrupt enable
+	*USART3.CR1 |= (1ul << 5);
+	//Receiver enable
+	*USART3.CR1 |= (1ul << 2);
+	*NVIC.ISER1 |= 1ul << (USART3_IRQ_NUMBER%32);
+	//Transmitter enable
+	*USART3.CR1 |= (1ul << 3);
+}
+
+void UARTBluetoothSend(char packet[]) {
+	int16_t i = 0;
+	while(packet[i] != '\0') {
+		*USART3.DR = packet[i];
+		//If a frame is transmitted (after the stop bit) and the TXE bit is set, the TC bit goes high.
+		while(!(*USART3.SR & (1ul << 6)));
+		i++;
+	}
+}
+
+
+/*
 This function for USART2 that is used for debugging
 The USART2 interface available on PA2 and PA3 of the STM32 microcontroller can be connected to ST-LINK MCU.
 Page 25. UM1724
@@ -28,7 +88,6 @@ Repeat this for each data to be transmitted in case of single buffer.
 8. After writing the last data into the USART_DR register, wait until TC=1. This indicates that the transmission of the last frame is complete. 
 This is required for instance when the USART is disabled or enters the Halt mode to avoid corrupting the last transmission.
 */
-
 void InitUARTforDebug(void) {
 	//AHB is enabled for GPIOA
 	*RCC.AHBENR |= 1ul << 0;
@@ -88,11 +147,26 @@ void USART2_IRQHandler(void) {
 			receivedDebugPacket[receivedDebugIndex] = *USART2.DR;
 			receivedDebugIndex++;
 		}else {
-			UARTDebugSend(receivedDebugPacket);
+			UARTBluetoothSend(receivedDebugPacket);
 			for(clearDebugPacket = 0; clearDebugPacket < receivedDebugIndex ; clearDebugPacket++) receivedDebugPacket[clearDebugPacket] = '\0';
 			receivedDebugIndex = 0;
 		}
 		*USART2.SR &= ~(1ul << 5);	//The RXNE flag can also be cleared by writing a zero to it
+	}
+}
+
+void USART3_IRQHandler(void) {
+	//If it is a RX ISR
+	if(*USART3.SR & (1ul << 5)) {
+		if(*USART3.DR != '\n') {		//When press enter 
+			receivedBluetoothPacket[receivedBluetoothIndex] = *USART3.DR;
+			receivedBluetoothIndex++;
+		}else {
+			UARTDebugSend(receivedBluetoothPacket);
+			for(clearBluetoothPacket = 0; clearBluetoothPacket < receivedBluetoothIndex ; clearBluetoothPacket++) receivedBluetoothPacket[clearBluetoothPacket] = '\0';
+			receivedBluetoothIndex = 0;
+		}
+		*USART3.SR &= ~(1ul << 5);	//The RXNE flag can also be cleared by writing a zero to it
 	}
 }
 
