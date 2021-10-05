@@ -16,10 +16,10 @@ int main() {
 		sprintf(msg, "Packet Number = %d\n", pckCnt);
 		UARTDebugSend(msg);
 		pckCnt++;
-		
+
 		OnUserLED();
-		delayMS(500);
+		delayMS(100);
 		OffUserLED();
-		delayMS(500);
+		delayMS(100);
 	}
 }

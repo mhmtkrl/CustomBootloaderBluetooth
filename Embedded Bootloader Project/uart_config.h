@@ -4,6 +4,7 @@ This is for UART register address
 
 #include <stdint.h>
 #include "stdio.h"
+#include "NVIC_controller.h"
 
 //Register Boundary Address Table 5 page 47 RM0038
 #define usart2_base						0x40004400
@@ -47,6 +48,10 @@ static USARTRegister USART3 = {
 	(uint32_t*)(usart3_base + usart_cr3_offset),
 	(uint32_t*)(usart3_base + usart_gtpr_offset)
 };
+
+static char receivedDebugPacket[64];
+static int16_t receivedDebugIndex = 0;
+static int16_t clearDebugPacket = 0;
 
 void InitUARTforDebug(void);
 void UARTDebugSend(char packet[]);
