@@ -3,6 +3,7 @@
 #include "gpio_config.h"
 #include "sysTick_timer_config.h"
 #include "uart_config.h"
+#include "cmsis_armcc.h"
 
 #define XMODEM_SOH 0x01
 #define XMODEM_STX 0x02
@@ -31,11 +32,12 @@ int16_t j = 0;
 uint32_t adr = 0;
 uint8_t byte0, byte1, byte2, byte3;
 
+void (*JumpToApplicationCode)(void);
+
 void USART3_IRQHandler(void) {
 	//If it is a RX ISR
 	if(*USART3.SR & (1ul << 5)) {
 		receivedBluetoothPacket[receivedBluetoothIndex] = *USART3.DR;
-		*USART2.DR = receivedBluetoothPacket[receivedBluetoothIndex];
 		((uint8_t *)(&bootPacket[packetPosition]))[receivedBluetoothIndex] = (uint8_t)receivedBluetoothPacket[receivedBluetoothIndex];
 		receivedBluetoothIndex++;	
 			
@@ -52,23 +54,39 @@ void USART3_IRQHandler(void) {
 	*USART3.SR &= ~(1ul << 5);	//The RXNE flag can also be cleared by writing a zero to it
 }
 
-int main() {
+void jumpFunction(uint32_t codeAddress) {
+	JumpToApplicationCode = (void (*)(void)) (*((uint32_t *)(codeAddress + 4)));
+	__disable_irq();
+
+	*sysTickCSR = 0;
+	*(uint32_t*)0xE000ED08 = codeAddress;
+	__set_MSP(*(uint32_t*)codeAddress);
+	UARTDebugSend("\r\n---->Jumping to the Application Code!\r\n");
+	JumpToApplicationCode();
+}
+
+		int main() {
  	InitSysTickTimerInMiliseconds(1, (uint32_t)CLOCK_FREQ);
 	InitUserLED();
 	InitUARTforDebug();	
 	InitUARTforBluetooth();
 	
 	welcomeMessage();
-	
+		//////ERASE PARTICULAR SECTORS///////////////////////
+			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS);
+			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x100);
+			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x200);
+			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x300);
+			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x400);
+			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x500);
 	
 	*USART3.DR = XMODEM_NAK;
 	
 	while(1) {
 		if(fileTransferComplete) {
-			UARTDebugSend("\r\nfile transfer is done\r\n");
+			UARTDebugSend("\r\nA new file has been received!\r\n");
 			OnUserLED();
-			//////ERASE PARTICULAR SECTORS///////////////////////
-			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS);
+		
 			sprintf(msg, "+++SECTOR %d is erased!\n", (((uint32_t)APPLICATION_FIRMWARE_BASE_ADDRESS) & 0x000FF000) >> 12);
 			UARTDebugSend(msg);
 			sprintf(msg, "+++Current Data @ 0x%X      : 0x%X\n", (uint32_t)APPLICATION_FIRMWARE_BASE_ADDRESS, *(uint32_t*)APPLICATION_FIRMWARE_BASE_ADDRESS);
@@ -84,15 +102,21 @@ int main() {
 					byte1 = (bootPacket[pos].packetData[j]&0x0000FF00) >> 8;
 					byte0 = (bootPacket[pos].packetData[j]&0x000000FF) >> 0;
 					program_Memory_Fast_Word_Write((APPLICATION_FIRMWARE_BASE_ADDRESS + adr), bootPacket[pos].packetData[j]);
-					//sprintf(msg, "@0x%X = 0x%X => %c%c%c%c\n", (APPLICATION_FIRMWARE_BASE_ADDRESS + adr), bootPacket[pos].packetData[j], byte0, byte1, byte2, byte3);
-					sprintf(msg, "0x%X, 0x%X, 0x%X, 0x%X => %c%c%c%c, 0x%X\n", bootPacket[pos].pakcet_SOH, bootPacket[pos].packetNumber, bootPacket[pos].pakcetNumberComp, bootPacket[pos].packetData[j], byte0, byte1, byte2, byte3, bootPacket[pos].packetCRC);
+					//delayMS(50);
+					sprintf(msg, "-->@0x%X = 0x%X\n", (APPLICATION_FIRMWARE_BASE_ADDRESS + adr), bootPacket[pos].packetData[j]);
+					//sprintf(msg, "0x%X, 0x%X, 0x%X, 0x%X => %c%c%c%c, 0x%X\n", bootPacket[pos].pakcet_SOH, bootPacket[pos].packetNumber, bootPacket[pos].pakcetNumberComp, bootPacket[pos].packetData[j], byte0, byte1, byte2, byte3, bootPacket[pos].packetCRC);
 					UARTDebugSend(msg);
 					adr += 4;
 				}
-			}
-			UARTDebugSend("\r\nEnd of bootloader process\r\n");
+		  }
+			sprintf(msg, "\n:REPORT: %d bytes memory has been used!\n", adr-4);
+			UARTDebugSend(msg);
+			UARTDebugSend("\r\nEnd of the bootloader process!\r\n");
 			OffUserLED();
 			fileTransferComplete = 0;
+			*FLASH.PECR  |= 1ul << 0;
+			*FLASH.PECR |= 1ul << 1;
+			jumpFunction(APPLICATION_FIRMWARE_BASE_ADDRESS);
 		}
 	}
 }

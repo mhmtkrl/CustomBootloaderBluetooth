@@ -8,3 +8,4 @@
 .\objects\main.o: uart_config.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\main.o: NVIC_controller.h
+.\objects\main.o: C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h

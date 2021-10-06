@@ -1,6 +1,6 @@
 Dependencies for Project 'bootlaoder', Target 'Bootloader Project': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (.\main.c)(0x615CB223)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I "..\Embedded Bootloader Project"-I.\RTE\_Bootloader_Project-IC:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32L152xE -D_RTE_-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\main.c)(0x615DE1FB)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I "..\Embedded Bootloader Project"-I.\RTE\_Bootloader_Project-IC:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32L152xE -D_RTE_-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (flash_config.h)(0x615B4EC0)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8E7502)
 I (program_memory.h)(0x615C66D6)
@@ -10,6 +10,7 @@ I (clock_config.h)(0x615B7C35)
 I (uart_config.h)(0x615C8E58)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5E8E7502)
 I (NVIC_controller.h)(0x615C5B4A)
+I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h)(0x60D42F32)
 F (.\flash_config.c)(0x615B53C8)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I "..\Embedded Bootloader Project"-I.\RTE\_Bootloader_Project-IC:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32L152xE -D_RTE_-o .\objects\flash_config.o --omf_browse .\objects\flash_config.crf --depend .\objects\flash_config.d)
 I (flash_config.h)(0x615B4EC0)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8E7502)
