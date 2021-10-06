@@ -29,6 +29,7 @@ int8_t fileTransferComplete = 0;
 int8_t pos = 0;
 int16_t j = 0;
 
+uint16_t base =  0x100;
 uint32_t adr = 0;
 uint8_t byte0, byte1, byte2, byte3;
 
@@ -62,23 +63,20 @@ void jumpFunction(uint32_t codeAddress) {
 	*(uint32_t*)0xE000ED08 = codeAddress;
 	__set_MSP(*(uint32_t*)codeAddress);
 	UARTDebugSend("\r\n---->Jumping to the Application Code!\r\n");
+	UARTBluetoothSend("\r\n---->Jumping to the Application Code!\r\n");
 	JumpToApplicationCode();
 }
 
-		int main() {
+int main() {
  	InitSysTickTimerInMiliseconds(1, (uint32_t)CLOCK_FREQ);
 	InitUserLED();
 	InitUARTforDebug();	
 	InitUARTforBluetooth();
 	
+	UARTBluetoothSend("\r\n****BOOT MODE!****\r\n");
 	welcomeMessage();
-		//////ERASE PARTICULAR SECTORS///////////////////////
-			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS);
-			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x100);
-			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x200);
-			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x300);
-			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x400);
-			program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + 0x500);
+	
+	program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS);
 	
 	*USART3.DR = XMODEM_NAK;
 	
@@ -96,22 +94,30 @@ void jumpFunction(uint32_t codeAddress) {
 			for(pos = 0 ; pos < packetPosition ; pos++) {
 				sprintf(msg, "\r\nWriting to the allocated memory area...\n");
 				UARTDebugSend(msg);
+				UARTBluetoothSend(msg);
+				if(adr % 512) {
+					program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + base);
+					base += 0x100;
+				}
 				for(j = 0 ; j < 32 ; j++) {
 					byte3 = (bootPacket[pos].packetData[j]&0xFF000000) >> 24;
 					byte2 = (bootPacket[pos].packetData[j]&0x00FF0000) >> 16;
 					byte1 = (bootPacket[pos].packetData[j]&0x0000FF00) >> 8;
 					byte0 = (bootPacket[pos].packetData[j]&0x000000FF) >> 0;
 					program_Memory_Fast_Word_Write((APPLICATION_FIRMWARE_BASE_ADDRESS + adr), bootPacket[pos].packetData[j]);
-					//delayMS(50);
+					//delayMS(30);
 					sprintf(msg, "-->@0x%X = 0x%X\n", (APPLICATION_FIRMWARE_BASE_ADDRESS + adr), bootPacket[pos].packetData[j]);
 					//sprintf(msg, "0x%X, 0x%X, 0x%X, 0x%X => %c%c%c%c, 0x%X\n", bootPacket[pos].pakcet_SOH, bootPacket[pos].packetNumber, bootPacket[pos].pakcetNumberComp, bootPacket[pos].packetData[j], byte0, byte1, byte2, byte3, bootPacket[pos].packetCRC);
 					UARTDebugSend(msg);
+					UARTBluetoothSend(msg);
 					adr += 4;
 				}
 		  }
 			sprintf(msg, "\n:REPORT: %d bytes memory has been used!\n", adr-4);
 			UARTDebugSend(msg);
+			UARTBluetoothSend(msg);
 			UARTDebugSend("\r\nEnd of the bootloader process!\r\n");
+			UARTBluetoothSend("\r\nEnd of the bootloader process!\r\n");
 			OffUserLED();
 			fileTransferComplete = 0;
 			*FLASH.PECR  |= 1ul << 0;
