@@ -1,4 +1,17 @@
 #include "flash_config.h"
+#include "sysTick_timer_config.h"
+#include "uart_config.h"
+
+void jumpFunction(uint32_t codeAddress) {
+	JumpToApplicationCode = (void (*)(void)) (*((uint32_t *)(codeAddress + 4)));
+	__disable_irq();
+	*sysTickCSR = 0;
+	*(uint32_t*)0xE000ED08 = codeAddress;
+	__set_MSP(*(uint32_t*)codeAddress);
+	UARTDebugSend("\r\n---->Jumping to the Application Code!\r\n");
+	UARTBluetoothSend("\r\n---->Jumping to the Application Code!\r\n");
+	JumpToApplicationCode();
+}
 
 /*
 This operation is used to erase a page in program memory (64 words).
@@ -43,6 +56,11 @@ uint8_t unlocking_Option_Byte_Block(void) {
 		*FLASH.OPTKEYR = 0x24252627;
 	}
 	return ((*FLASH.PECR) & 0x04);
+}
+
+void locking_Program_Memory(void) {
+	*FLASH.PECR  |= 1ul << 0;
+	*FLASH.PECR |= 1ul << 1;
 }
 
 /*

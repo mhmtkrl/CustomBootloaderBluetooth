@@ -1,3 +1,9 @@
 .\objects\flash_config.o: flash_config.c
 .\objects\flash_config.o: flash_config.h
 .\objects\flash_config.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\flash_config.o: C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h
+.\objects\flash_config.o: sysTick_timer_config.h
+.\objects\flash_config.o: clock_config.h
+.\objects\flash_config.o: uart_config.h
+.\objects\flash_config.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\flash_config.o: NVIC_controller.h

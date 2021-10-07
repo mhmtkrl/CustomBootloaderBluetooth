@@ -7,3 +7,4 @@
 .\objects\uart_config.o: gpio_config.h
 .\objects\uart_config.o: program_memory.h
 .\objects\uart_config.o: flash_config.h
+.\objects\uart_config.o: C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h

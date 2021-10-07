@@ -448,6 +448,11 @@
               <FileType>5</FileType>
               <FilePath>.\NVIC_controller.h</FilePath>
             </File>
+            <File>
+              <FileName>xmodem_protocol.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\xmodem_protocol.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

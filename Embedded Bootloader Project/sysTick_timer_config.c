@@ -22,5 +22,6 @@ void delayMS(int16_t del) {
 	sysTickCount = 0;
 }
 
-
-
+void SysTick_Handler(void) {
+	sysTickCount++;
+}

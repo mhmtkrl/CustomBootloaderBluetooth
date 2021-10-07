@@ -4,13 +4,7 @@
 #include "gpio_config.h"
 #include "stdio.h"
 
-
-#define APP_MODE 							1
-char buf[64];
-int c = 0, a = 10;
-
-
-
+#define APP_MODE 							0
 
 #if APP_MODE == 0
 	#define LED_ON_TIME		1000
@@ -22,7 +16,8 @@ int c = 0, a = 10;
 	#define LED_OFF_TIME 	500
 #endif
 
-
+char buf[128];
+uint8_t rawData1 = 0, rawData2 = 255;
 
 int main() {
 	__enable_irq();
@@ -30,18 +25,16 @@ int main() {
 	InitUARTforDebug();	
 	InitUARTforBluetooth();
 	InitUserLED();
-	
-	UARTDebugSend("\r\n***************--The firmware update has been done successfully!--***************\n");
-	UARTBluetoothSend("\r\n***************--The firmware update has been done successfully!--***************\n");
+
+	UARTBluetoothSend("\r\n********--The firmware update has been done successfully!--********\n");
 	
 	while(1) {
-		sprintf(buf, "Application Code::: %d\n", c*6);
-		c++;
+		sprintf(buf, "---Raw Data1 = %d\n", rawData1);
 		UARTBluetoothSend(buf);
-		
-		sprintf(buf, "ADC: %d\n", a*2);
-		a++;
+		sprintf(buf, "---Raw Data2 = %d\n", rawData2);
 		UARTBluetoothSend(buf);
+		rawData1++;
+		rawData2--;
 		
 		OnUserLED();
 		delayMS(LED_ON_TIME);
