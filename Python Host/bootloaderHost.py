@@ -6,6 +6,7 @@ BaudRate = 115200
 
 print('Welcome to the Bootloader Server')
 myBluetooth = serial.Serial(BluetoothDevice, BaudRate)
+
 print('Connected to the Bluetooth Device')
 
 IsThereAnyUpdate = input('Is There Any Update?')
@@ -16,4 +17,5 @@ while True:
     print(str(new_data))
     myBluetooth.write(bytes(0x65))
     time.sleep(1)
+    myBluetooth.close()
     

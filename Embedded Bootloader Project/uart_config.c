@@ -46,7 +46,7 @@ void InitUARTforBluetooth(void) {
 	*USART3.BRR = 0x00000012;
 	//RXNE interrupt enable
 	*USART3.CR1 |= (1ul << 5);
-	//Receiver enable
+//	//Receiver enable
 	*USART3.CR1 |= (1ul << 2);
 	*NVIC.ISER1 |= 1ul << (USART3_IRQ_NUMBER%32);
 	//Transmitter enable

@@ -5,6 +5,7 @@
 #include "uart_config.h"
 #include "cmsis_armcc.h"
 
+
 #define XMODEM_SOH 0x01
 #define XMODEM_STX 0x02
 #define XMODEM_ETX 0x03
@@ -33,6 +34,8 @@ uint16_t base =  0x100;
 uint32_t adr = 0;
 uint8_t byte0, byte1, byte2, byte3;
 
+
+
 void (*JumpToApplicationCode)(void);
 
 void USART3_IRQHandler(void) {
@@ -54,7 +57,9 @@ void USART3_IRQHandler(void) {
 	}
 	*USART3.SR &= ~(1ul << 5);	//The RXNE flag can also be cleared by writing a zero to it
 }
-
+void SysTick_Handler(void) {
+	sysTickCount++;
+}
 void jumpFunction(uint32_t codeAddress) {
 	JumpToApplicationCode = (void (*)(void)) (*((uint32_t *)(codeAddress + 4)));
 	__disable_irq();
@@ -73,12 +78,13 @@ int main() {
 	InitUARTforDebug();	
 	InitUARTforBluetooth();
 	
-	UARTBluetoothSend("\r\n****BOOT MODE!****\r\n");
+	UARTBluetoothSend(bluetoothWelcomeMessage);
 	welcomeMessage();
 	
 	program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS);
 	
 	*USART3.DR = XMODEM_NAK;
+	
 	
 	while(1) {
 		if(fileTransferComplete) {
@@ -130,7 +136,7 @@ int main() {
 void welcomeMessage(void) {
 	//Welcome Message
 	UARTDebugSend(debugWelcomeMessage);
-	//UARTBluetoothSend(bluetoothWelcomeMessage);
+	//-UARTBluetoothSend(bluetoothWelcomeMessage);
 	sprintf(msg, "--Bootloader Size               : %d kB\n", (uint8_t)BOOTLOADER_SIZE_KB);
 	UARTDebugSend(msg);
 	sprintf(msg, "--Application Code Base Address : SECTOR %d\n", (((uint32_t)APPLICATION_FIRMWARE_BASE_ADDRESS) & 0x000FF000) >> 12);

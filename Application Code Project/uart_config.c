@@ -1,5 +1,6 @@
 #include "uart_config.h"
 
+
 void InitUARTforBluetooth(void) {
 	//AHB is enabled for GPIOB
 	RCC->AHBENR |= 1ul << 1;
