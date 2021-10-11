@@ -1,6 +1,6 @@
 Dependencies for Project 'bootlaoder', Target 'Bootloader Project': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (.\main.c)(0x6163652E)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I "..\Embedded Bootloader Project"-I.\RTE\_Bootloader_Project-IC:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32L152xE -D_RTE_-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\main.c)(0x6164316B)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I "..\Embedded Bootloader Project"-I.\RTE\_Bootloader_Project-IC:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32L152xE -D_RTE_-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (flash_config.h)(0x61635F63)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8E7502)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\stm32l1xx.h)(0x5EF4D42C)
@@ -12,9 +12,9 @@ I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cms
 I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h)(0x60D42F32)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\system_stm32l1xx.h)(0x5EF4D42C)
 I (program_memory.h)(0x615EF73F)
-I (gpio_config.h)(0x616360A2)
+I (gpio_config.h)(0x61642FE5)
 I (sysTick_timer_config.h)(0x615C759B)
-I (clock_config.h)(0x616360E9)
+I (clock_config.h)(0x6164318E)
 I (uart_config.h)(0x616361F4)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5E8E7502)
 I (xmodem_protocol.h)(0x6163E219)
@@ -30,14 +30,14 @@ I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cms
 I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h)(0x60D42F32)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\system_stm32l1xx.h)(0x5EF4D42C)
 I (sysTick_timer_config.h)(0x615C759B)
-I (clock_config.h)(0x616360E9)
+I (clock_config.h)(0x6164318E)
 I (uart_config.h)(0x616361F4)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5E8E7502)
 F (.\flash_config.h)(0x61635F63)()
 F (.\program_memory.h)(0x615EF73F)()
-F (.\clock_config.h)(0x616360E9)()
+F (.\clock_config.h)(0x6164318E)()
 F (.\gpio_config.c)(0x616360A2)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I "..\Embedded Bootloader Project"-I.\RTE\_Bootloader_Project-IC:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32L152xE -D_RTE_-o .\objects\gpio_config.o --omf_browse .\objects\gpio_config.crf --depend .\objects\gpio_config.d)
-I (clock_config.h)(0x616360E9)
+I (clock_config.h)(0x6164318E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8E7502)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\stm32l1xx.h)(0x5EF4D42C)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\stm32l152xe.h)(0x5EF4D42C)
@@ -47,12 +47,12 @@ I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cms
 I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h)(0x60D42F32)
 I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h)(0x60D42F32)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\system_stm32l1xx.h)(0x5EF4D42C)
-I (gpio_config.h)(0x616360A2)
-F (.\gpio_config.h)(0x616360A2)()
+I (gpio_config.h)(0x61642FE5)
+F (.\gpio_config.h)(0x61642FE5)()
 F (.\sysTick_timer_config.c)(0x615EF8E7)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I "..\Embedded Bootloader Project"-I.\RTE\_Bootloader_Project-IC:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32L152xE -D_RTE_-o .\objects\systick_timer_config.o --omf_browse .\objects\systick_timer_config.crf --depend .\objects\systick_timer_config.d)
 I (sysTick_timer_config.h)(0x615C759B)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8E7502)
-I (clock_config.h)(0x616360E9)
+I (clock_config.h)(0x6164318E)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\stm32l1xx.h)(0x5EF4D42C)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\stm32l152xe.h)(0x5EF4D42C)
 I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\core_cm3.h)(0x60D42F32)
@@ -62,7 +62,7 @@ I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cms
 I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h)(0x60D42F32)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\system_stm32l1xx.h)(0x5EF4D42C)
 F (.\sysTick_timer_config.h)(0x615C759B)()
-F (.\uart_config.c)(0x6163624B)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I "..\Embedded Bootloader Project"-I.\RTE\_Bootloader_Project-IC:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32L152xE -D_RTE_-o .\objects\uart_config.o --omf_browse .\objects\uart_config.crf --depend .\objects\uart_config.d)
+F (.\uart_config.c)(0x61643086)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I "..\Embedded Bootloader Project"-I.\RTE\_Bootloader_Project-IC:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include-D__UVISION_VERSION="533" -D_RTE_ -DSTM32L152xE -D_RTE_-o .\objects\uart_config.o --omf_browse .\objects\uart_config.crf --depend .\objects\uart_config.d)
 I (uart_config.h)(0x616361F4)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5E8E7502)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5E8E7502)
@@ -74,8 +74,8 @@ I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cms
 I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h)(0x60D42F32)
 I (C:\Users\koral\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h)(0x60D42F32)
 I (C:\Users\koral\AppData\Local\Arm\Packs\Keil\STM32L1xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32L1xx\Include\system_stm32l1xx.h)(0x5EF4D42C)
-I (clock_config.h)(0x616360E9)
-I (gpio_config.h)(0x616360A2)
+I (clock_config.h)(0x6164318E)
+I (gpio_config.h)(0x61642FE5)
 I (program_memory.h)(0x615EF73F)
 I (flash_config.h)(0x61635F63)
 F (.\uart_config.h)(0x616361F4)()

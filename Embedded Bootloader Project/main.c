@@ -1,3 +1,17 @@
+/*
+Author: Mehmet KORAL
+Date  : 11.10.2021
+Title : FUOTB -> Firmware Update Over The Bluetooth
+	Bluetooth Module is HC05
+	PB10 -> USART3_TX	  ->  HC05_RX
+	PB11 -> USART3_RX		->  HC05_TX
+	
+	USB cable can be used for debugging!
+	USART2 connects to the ST-LINK!
+	
+	When you press the reset button, the bootloader code will be launched.
+*/
+
 #include "flash_config.h"
 #include "program_memory.h"
 #include "gpio_config.h"

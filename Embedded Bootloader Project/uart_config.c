@@ -8,8 +8,8 @@
 This function for USART3 that is used for communicating to the host device over Bluetooth
 
 Table 9: Alternate Function Input/Output Page 47 DocID025433
-PB10 -> USART2_TX	  -> AFIO7
-PB11 -> UART2_RX		-> AFIO7
+PB10 -> USART3_TX	  -> AFIO7
+PB11 -> USART3_RX		-> AFIO7
 */
 void InitUARTforBluetooth(void) {
 	//AHB is enabled for GPIOB
