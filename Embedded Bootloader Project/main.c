@@ -36,10 +36,12 @@ void USART3_IRQHandler(void) {
 			USART3->DR = XMODEM_ACK;
 			fileTransferComplete = 1;
 		}
-		if(receivedBluetoothIndex == 132) {
-			USART3->DR = XMODEM_ACK;
-			packetPosition++;
-			receivedBluetoothIndex = 0;
+		else {
+			if(receivedBluetoothIndex == 132) {
+				USART3->DR = XMODEM_ACK;
+				packetPosition++;
+				receivedBluetoothIndex = 0;
+			}
 		}
 	}
 	USART3->SR &= ~(1ul << 5);	//The RXNE flag can also be cleared by writing a zero to it
