@@ -24,10 +24,10 @@ This operation is used to erase a page in program memory (64 words).
 */
 void program_Memory_Page_Erase(uint32_t pageBaseAddr) {
 	if(!unlocking_Program_Memory()) {
-		*FLASH.PECR |= (1ul << 9);
-		*FLASH.PECR |= (1ul << 3);
+		FLASH->PECR |= (1ul << 9);
+		FLASH->PECR |= (1ul << 3);
 		*(uint32_t*) pageBaseAddr = 0x00000000;
-		while((*FLASH.SR & 0x00000001));
+		while((FLASH->SR & 0x00000001));
 	}
 }
 
@@ -37,9 +37,9 @@ This operation is used to write a word to the Program Memory
 void program_Memory_Fast_Word_Write(uint32_t addr, uint32_t data) {
 	//If the program memory is unlocked
 	if(!unlocking_Program_Memory()) {
-		*FLASH.PECR &= ~(1ul << 9);
-		*FLASH.PECR &= ~(1ul << 3);
-		*FLASH.PECR &= ~(1ul << 8);
+		FLASH->PECR &= ~(1ul << 9);
+		FLASH->PECR &= ~(1ul << 3);
+		FLASH->PECR &= ~(1ul << 8);
 		*(uint32_t*)addr = data;
 	}
 }
@@ -51,16 +51,16 @@ Unlocking the option byte block, page 63, RM0038
 */
 uint8_t unlocking_Option_Byte_Block(void) {
 	//If the FLASH PECR is unlocked then perform the Option Byte Block unlocking
-	if(!unlocking_Flash_PECR_Register() && ((*FLASH.PECR) & 0x04)) {
-		*FLASH.OPTKEYR = 0xFBEAD9C8;
-		*FLASH.OPTKEYR = 0x24252627;
+	if(!unlocking_Flash_PECR_Register() && ((FLASH->PECR) & 0x04)) {
+		FLASH->OPTKEYR = 0xFBEAD9C8;
+		FLASH->OPTKEYR = 0x24252627;
 	}
-	return ((*FLASH.PECR) & 0x04);
+	return ((FLASH->PECR) & 0x04);
 }
 
 void locking_Program_Memory(void) {
-	*FLASH.PECR  |= 1ul << 0;
-	*FLASH.PECR |= 1ul << 1;
+	FLASH->PECR  |= 1ul << 0;
+	FLASH->PECR |= 1ul << 1;
 }
 
 /*
@@ -70,11 +70,11 @@ Unlocking the Program Memory, page 63, RM0038
 */
 uint8_t unlocking_Program_Memory(void) {
 	//If the FLASH PECR is unlocked then perform the Program Memory unlocking
-	if(!unlocking_Flash_PECR_Register() && ((*FLASH.PECR) & 0x02)) {
-		*FLASH.PRGKEYR = 0x8C9DAEBF;
-		*FLASH.PRGKEYR = 0x13141516;
+	if(!unlocking_Flash_PECR_Register() && ((FLASH->PECR) & 0x02)) {
+		FLASH->PRGKEYR = 0x8C9DAEBF;
+		FLASH->PRGKEYR = 0x13141516;
 	}
-	return ((*FLASH.PECR) & 0x02);
+	return ((FLASH->PECR) & 0x02);
 }
 
 /*
@@ -84,9 +84,9 @@ Unlocking the Data EEPROM block and the FLASH_PECR register, page 62, RM0038
 */
 uint8_t unlocking_Flash_PECR_Register(void) {
 	//If it is locked then perform unlocking
-	if(((*FLASH.PECR) & 0x01)) {
-		*FLASH.PEKEYR = 0x89ABCDEF;
-		*FLASH.PEKEYR = 0x02030405;
+	if(((FLASH->PECR) & 0x01)) {
+		FLASH->PEKEYR = 0x89ABCDEF;
+		FLASH->PEKEYR = 0x02030405;
 	}
-	return ((*FLASH.PECR) & 0x01);
+	return ((FLASH->PECR) & 0x01);
 }

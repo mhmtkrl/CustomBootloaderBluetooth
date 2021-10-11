@@ -4,7 +4,7 @@
 #include "gpio_config.h"
 #include "stdio.h"
 
-#define APP_MODE 							0
+#define APP_MODE 							1
 
 #if APP_MODE == 0
 	#define LED_ON_TIME		1000

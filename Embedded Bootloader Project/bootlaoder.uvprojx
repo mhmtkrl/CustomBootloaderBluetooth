@@ -404,11 +404,6 @@
               <FilePath>.\program_memory.h</FilePath>
             </File>
             <File>
-              <FileName>clock_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\clock_config.c</FilePath>
-            </File>
-            <File>
               <FileName>clock_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\clock_config.h</FilePath>
@@ -442,11 +437,6 @@
               <FileName>uart_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\uart_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>NVIC_controller.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\NVIC_controller.h</FilePath>
             </File>
             <File>
               <FileName>xmodem_protocol.h</FileName>

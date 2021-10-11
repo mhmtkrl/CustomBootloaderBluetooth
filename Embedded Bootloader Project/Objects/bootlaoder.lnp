@@ -1,7 +1,6 @@
 --cpu Cortex-M3
 ".\objects\main.o"
 ".\objects\flash_config.o"
-".\objects\clock_config.o"
 ".\objects\gpio_config.o"
 ".\objects\systick_timer_config.o"
 ".\objects\uart_config.o"

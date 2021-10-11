@@ -13,22 +13,22 @@ uint32_t adr = 0;
 
 void USART3_IRQHandler(void) {
 	//If it is a RX ISR
-	if(*USART3.SR & (1ul << 5)) {
-		receivedBluetoothPacket[receivedBluetoothIndex] = *USART3.DR;
+	if(USART3->SR & (1ul << 5)) {
+		receivedBluetoothPacket[receivedBluetoothIndex] = USART3->DR;
 		((uint8_t *)(&bootPacket[packetPosition]))[receivedBluetoothIndex] = (uint8_t)receivedBluetoothPacket[receivedBluetoothIndex];
 		receivedBluetoothIndex++;	
 			
 		if(bootPacket[packetPosition].pakcet_SOH == XMODEM_EOT) {
-			*USART3.DR = XMODEM_ACK;
+			USART3->DR = XMODEM_ACK;
 			fileTransferComplete = 1;
 		}
 		if(receivedBluetoothIndex == 132) {
-			*USART3.DR = XMODEM_ACK;
+			USART3->DR = XMODEM_ACK;
 			packetPosition++;
 			receivedBluetoothIndex = 0;
 		}
 	}
-	*USART3.SR &= ~(1ul << 5);	//The RXNE flag can also be cleared by writing a zero to it
+	USART3->SR &= ~(1ul << 5);	//The RXNE flag can also be cleared by writing a zero to it
 }
 
 int main() {
@@ -39,7 +39,7 @@ int main() {
 	
 	welcomeMessage();
 	
-	*USART3.DR = XMODEM_NAK;
+	USART3->DR = XMODEM_NAK;
 	
 	while(1) {
 		if(fileTransferComplete) {
@@ -54,6 +54,7 @@ int main() {
 					program_Memory_Page_Erase(APPLICATION_FIRMWARE_BASE_ADDRESS + VECTOR_BASE);
 					VECTOR_BASE += 0x100;
 				}
+				locking_Program_Memory();
 				for(j = 0 ; j < 32 ; j++) {
 					program_Memory_Fast_Word_Write((APPLICATION_FIRMWARE_BASE_ADDRESS + adr), bootPacket[pos].packetData[j]);
 					sprintf(msg, "-->@0x%X = 0x%X\n", (APPLICATION_FIRMWARE_BASE_ADDRESS + adr), bootPacket[pos].packetData[j]);
@@ -61,6 +62,7 @@ int main() {
 					UARTBluetoothSend(msg);
 					adr += 4;
 				}
+				locking_Program_Memory();
 		  }
 			sprintf(msg, "\n:REPORT: %d bytes memory has been used!\n", adr-4);
 			UARTBluetoothSend(msg);
