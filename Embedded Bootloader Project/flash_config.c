@@ -1,16 +1,46 @@
 #include "flash_config.h"
 #include "sysTick_timer_config.h"
 #include "uart_config.h"
+#include <stdio.h>
 
-void jumpFunction(uint32_t codeAddress) {
-	JumpToApplicationCode = (void (*)(void)) (*((uint32_t *)(codeAddress + 4)));
-	__disable_irq();
-	*sysTickCSR = 0;
-	*(uint32_t*)0xE000ED08 = codeAddress;
-	__set_MSP(*(uint32_t*)codeAddress);
-	UARTDebugSend("\r\n---->Jumping to the Application Code!\r\n");
-	UARTBluetoothSend("\r\n---->Jumping to the Application Code!\r\n");
-	JumpToApplicationCode();
+/*
+https://developer.arm.com/documentation/ka002218/latest
+Arm Compiler 5
+*/
+
+
+void BootJump( uint32_t *Address ) {
+	//@(APPLICATION_FIRMWARE_BASE_ADDRESS + 4)
+	reset_handler_function reset_handler = (reset_handler_function) (( uint32_t )*(uint32_t *)(Address + 1));
+	//Disable Interrupts
+ __disable_irq();
+	//Disable SysTick
+	SysTick->CTRL = 0;
+	//Clear SysTick's exception pending bit
+	SCB->ICSR |= SCB_ICSR_PENDSTCLR_Msk;
+	//Disable individual fault handlers if the bootloader used them
+	SCB->SHCSR &= ~( SCB_SHCSR_USGFAULTENA_Msk | 
+                 SCB_SHCSR_BUSFAULTENA_Msk | 
+                 SCB_SHCSR_MEMFAULTENA_Msk ) ;
+	//Activate the MSP, if the core is found to currently run with the PSP. 
+	//As the compiler might still use the stack, the PSP needs to be copied to the MSP before this
+	if( CONTROL_SPSEL_Msk & __get_CONTROL( ) )
+	{  /* MSP is not active */
+		__set_MSP( __get_PSP( ) ) ;
+		__set_CONTROL( __get_CONTROL( ) & ~CONTROL_SPSEL_Msk ) ;
+	}
+	//Load the vector table address of the user application into SCB->VTOR register
+	SCB->VTOR = ( uint32_t )Address ;
+	/*The final part is to set the MSP to the value found in the user application vector table and then 
+	load the PC with the reset vector value of the user application. 
+	This can't be done in C, as it is always possible, that the compiler uses the current SP. 
+	But that would be gone after setting the new MSP. So, a call to a small assembler function is done.
+	*/
+	//Address is an argument of the function, it is actually a pointer that points APPLICATION_FIRMWARE_BASE_ADDRESS
+	//There is a SP at this address, and next instruction's address will be loaded into PC
+	 __set_MSP(( uint32_t )*(uint32_t *)Address);
+ 
+  reset_handler();
 }
 
 /*

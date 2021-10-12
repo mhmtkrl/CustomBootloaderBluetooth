@@ -33,14 +33,14 @@ void USART3_IRQHandler(void) {
 		receivedBluetoothIndex++;	
 			
 		if(bootPacket[packetPosition].pakcet_SOH == XMODEM_EOT) {
-			USART3->DR = XMODEM_ACK;
 			fileTransferComplete = 1;
+			USART3->DR = XMODEM_ACK;
 		}
 		else {
 			if(receivedBluetoothIndex == 132) {
-				USART3->DR = XMODEM_ACK;
 				packetPosition++;
 				receivedBluetoothIndex = 0;
+				USART3->DR = XMODEM_ACK;
 			}
 		}
 	}
@@ -55,7 +55,7 @@ int main() {
 	
 	welcomeMessage();
 	
-	USART3->DR = XMODEM_NAK;
+	USART3->DR = XMODEM_NAK;	
 	
 	while(1) {
 		if(fileTransferComplete) {
@@ -86,7 +86,7 @@ int main() {
 			OffUserLED();
 			fileTransferComplete = 0;
 			locking_Program_Memory();
-			jumpFunction(APPLICATION_FIRMWARE_BASE_ADDRESS);
+			BootJump( ( uint32_t * )APPLICATION_FIRMWARE_BASE_ADDRESS ) ;
 		}
 	}
 }
